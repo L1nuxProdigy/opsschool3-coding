@@ -1,20 +1,24 @@
 ### requires some changes to meet demand
-### 1. import the sys library to make the file accept a json file as parameter, for now its hardcoded
-### 2. since the excersice description was not clear, for now both of the bucket limits are not included
-### 3. since the excersice description was not clear, for now a bucket from 0-11 does not exist
-### 4. yuml dump returns sort of json, need to search a parameter to fix it
 ### 5. still didn't figure how to incorporate error handeling
-### 6. the yaml dump returns some jibrish, need to look for a parameter to return as utf-8
 ### 7. all around messy code should consider re do it from the grounds up
+
+### 1-4 + 6 issues dealt with :]], also 5 had been dealt with a little bit
 
 import json
 import yaml
+import sys
+import os.path
 
-#take a json file as parameter and returns it, need to return a dictionary- does not handle it yet
-def load_json_and_return(j_file):
-    with open(j_file, "r") as read_file:
-        data = json.load(read_file)
-        return data
+def accept_json_as_argument():
+    if len(sys.argv) <= 1:
+        print("dude where is the file?")
+        sys.exit()
+    json_as_argument = sys.argv[1]
+    if os.path.exists(json_as_argument) == False:
+        print("Hey, the %s file was not found, give me correct path and file"% json_as_argument)
+        sys.exit()
+    json_to_py_obj = open(json_as_argument,"r")
+    return json.load(json_to_py_obj)
 
 #take the dictionary and returns the highest integer value
 def d_keys(dictio):
@@ -33,9 +37,10 @@ def l_keys(dictio):
     v_list.sort()
     return v_list
 
-json_file_path = "./document_for_ex1.json"
-from_j_to_p = load_json_and_return(json_file_path)
+from_j_to_p = accept_json_as_argument()
 from_j_to_p["buckets"].sort()
+if from_j_to_p["buckets"][0] > 0:
+    from_j_to_p["buckets"].insert(0,0)
 from_j_to_p["buckets"].append(d_keys(from_j_to_p))
 
 ages_dic_values = l_keys(from_j_to_p)
@@ -44,10 +49,10 @@ for i in range(0,len(from_j_to_p["buckets"])-1):
     temp_list = []
     for i2 in from_j_to_p["ppl_ages"]:
         age_val = from_j_to_p["ppl_ages"].get(i2)
-        if age_val > from_j_to_p["buckets"][i] and age_val < from_j_to_p["buckets"][i + 1]:
+        if age_val > from_j_to_p["buckets"][i] and age_val <= from_j_to_p["buckets"][i + 1]:
             temp_list.append(i2)
     new_dict[str(from_j_to_p["buckets"][i]) + "-" + str(from_j_to_p["buckets"][i + 1])] = temp_list
 
 yaml_file_path = "./yaml_post.yaml"
 with open(yaml_file_path, "w") as write_file:
-    yaml.dump(new_dict, write_file)
+    yaml.dump(new_dict, write_file, default_flow_style=False, allow_unicode=True)
