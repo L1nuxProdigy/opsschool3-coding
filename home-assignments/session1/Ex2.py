@@ -15,11 +15,11 @@ weather_api_call = requests.get(weather_api_url).json()
 temperture = weather_api_call["main"]["temp"]
 weather_var = open("weather_file.txt", "w")
 weather_var.write(str(temperture))
+weather_var.close()
 
 
 ## part 2
 
-#takes a city name and returns and array of temperture and country code
 def what_temperture_and_country_code(city):
     fixed_city_name = city.replace(" ","+").replace("-","+")
     f_weather_api_url = "http://api.openweathermap.org/data/2.5/weather?q={}&appid=dec07a75427862501fb3e97181ac04e8&units=metric".format(fixed_city_name)
