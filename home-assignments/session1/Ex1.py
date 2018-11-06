@@ -14,11 +14,15 @@ def accept_json_as_argument():
         print("dude where is the file?")
         sys.exit()
     json_as_argument = sys.argv[1]
-    if os.path.exists(json_as_argument) == False:
+    if not os.path.exists(json_as_argument):
         print("Hey, the %s file was not found, give me correct path and file"% json_as_argument)
         sys.exit()
-    json_to_py_obj = open(json_as_argument,"r")
-    return json.load(json_to_py_obj)
+    # json_to_py_obj = open(json_as_argument,"r")
+    # return json.load(json_to_py_obj)
+    with open(json_as_argument, "r") as json_to_py_obj:
+        return_json_as_python = json.load(json_to_py_obj)
+    return return_json_as_python
+
 
 #take the dictionary and returns the highest integer value
 def d_keys(dictio):
@@ -56,3 +60,5 @@ for i in range(0,len(from_j_to_p["buckets"])-1):
 yaml_file_path = "./yaml_post.yaml"
 with open(yaml_file_path, "w") as write_file:
     yaml.dump(new_dict, write_file, default_flow_style=False, allow_unicode=True)
+    write_file.close()
+
