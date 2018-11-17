@@ -54,6 +54,14 @@ def check_forecast_input(forecast):
             print("dude stop trying to mess with the program and enter somthing valid")
             sys.exit()
 
+def weather_in_fahrenheit():
+    weather = Weather(unit=Unit.FAHRENHEIT)
+    return weather
+
+def weather_in_celsius():
+    weather = Weather(unit=Unit.CELSIUS)
+    return weather
+
 def what_temperature_metric(c):
     if c:
         weather = weather_in_celsius()
@@ -87,14 +95,6 @@ def output_for_multiple_days(forecast, location, temperature_metric):
         high_temperature = forecasts[forecast_index].high
         print("{} {} with temperatures trailing from {}-{} {}.".format(date, location_overview, low_temperature,
                                                                        high_temperature, temperature_metric))
-
-def weather_in_fahrenheit():
-    weather = Weather(unit=Unit.FAHRENHEIT)
-    return weather
-
-def weather_in_celsius():
-    weather = Weather(unit=Unit.CELSIUS)
-    return weather
 
 
 
